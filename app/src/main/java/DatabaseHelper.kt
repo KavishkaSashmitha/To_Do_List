@@ -10,7 +10,8 @@ class DatabaseHelper(context: Context) :
         val SQL_CREATE_ENTRIES =
             "CREATE TABLE ${DatabaseContract.TaskEntry.TABLE_NAME} (" +
                     "${DatabaseContract.TaskEntry._ID} INTEGER PRIMARY KEY," +
-                    "${DatabaseContract.TaskEntry.COLUMN_NAME_TASK} TEXT)"
+                    "${DatabaseContract.TaskEntry.COLUMN_NAME_TASK} TEXT," +
+                    "${DatabaseContract.TaskEntry.COLUMN_NAME_TIME} TEXT)" // Add the time column
 
         db.execSQL(SQL_CREATE_ENTRIES)
     }
@@ -20,10 +21,13 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun updateTask(taskId: Long, newTask: String) {
-        val db = writableDatabase
+    fun updateTask(taskId: Long, newTask: String, newTime: String?) {
+        val db = this.writableDatabase
         val values = ContentValues().apply {
             put(DatabaseContract.TaskEntry.COLUMN_NAME_TASK, newTask)
+            newTime?.let {
+                put(DatabaseContract.TaskEntry.COLUMN_NAME_TIME, it)
+            }
         }
         db.update(
             DatabaseContract.TaskEntry.TABLE_NAME,
@@ -33,8 +37,9 @@ class DatabaseHelper(context: Context) :
         )
     }
 
+
     companion object {
         const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "Tasks.db"
+        const val DATABASE_NAME = "Task_App.db"
     }
 }

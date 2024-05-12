@@ -1,21 +1,64 @@
-
-<!-- task_item.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_margin="8dp"
+    android:layout_gravity="center"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textViewTask"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete" />
-</LinearLayout>
+        <!-- Text Views -->
+        <LinearLayout
+            android:id="@+id/textLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/textViewTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Task Name"
+                android:gravity="center"
+                android:textSize="18sp"/> <!-- Adjust text size as needed -->
+
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Task Time"
+                android:gravity="center"
+                android:textSize="16sp"/> <!-- Adjust text size as needed -->
+        </LinearLayout>
+
+        <!-- Edit Button -->
+
+        <!-- Delete Button -->
+
+        <ImageView
+            android:id="@+id/buttonEdit"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_below="@id/textLayout"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/buttonDelete"
+            android:src="@drawable/edit" />
+
+        <ImageView
+            android:id="@+id/buttonDelete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_below="@id/textLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/baseline_auto_delete_24" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

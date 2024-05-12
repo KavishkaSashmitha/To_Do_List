@@ -1,29 +1,71 @@
-<!-- activity_main.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout for Task Management App -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    android:background="@drawable/rounded_corner_background">
 
+    <!-- Header Note -->
+    <TextView
+        android:id="@+id/textHeaderNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily Task Management App"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Task Input -->
     <EditText
         android:id="@+id/editTextTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter task" />
+        android:hint="Enter task"
+        android:padding="12dp"
+        android:layout_below="@id/textHeaderNote"
+        android:layout_marginBottom="12dp" />
 
+    <!-- Time Input -->
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTextTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter time (optional)"
+        android:padding="12dp"
+        android:layout_below="@id/editTextTask"
+        android:layout_marginBottom="12dp"
+        android:focusable="false" />
+
+
+    <!-- Add Task Button -->
     <Button
         android:id="@+id/buttonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextTask"
-        android:text="Add Task" />
+        android:layout_below="@id/editTextTime"
+    android:layout_centerHorizontal="true"
+    android:text="Add Task"
+    android:background="@drawable/button_background"
+    android:textColor="@android:color/white"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp" />
 
+    <!-- Search EditText -->
+
+    <!-- Task List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonAdd"
-        android:layout_marginTop="16dp" />
+    android:layout_marginTop="16dp"
+    android:padding="8dp" />
 
 </RelativeLayout>
