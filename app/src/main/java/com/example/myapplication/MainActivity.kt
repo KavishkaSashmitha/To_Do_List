@@ -4,14 +4,19 @@ import DatabaseContract
 import DatabaseHelper
 import android.app.TimePickerDialog
 import android.content.ContentValues
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,31 +51,50 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonAdd.setOnClickListener {
-            val task = editTextTask.text.toString()
+            val task = editTextTask.text.toString().trim()
             val time = editTextTime.text.toString()
-            if (task.isNotEmpty()) {
+            if (task.isEmpty() || time.isEmpty()) {
+                // If either task or time is empty, show an error message
+                showToast("Please fill in both task and time fields")
+            } else if (task.split("\\s+".toRegex()).size > 10 || task.length > 10) {
+                // If the number of words exceeds 10 or the length exceeds 10 characters, show an error message
+                editTextTask.error = "Task should not exceed 10 words or characters"
+            } else {
+                // Otherwise, add the task
                 addTask(task, time)
                 editTextTask.text.clear()
                 editTextTime.text?.clear()
             }
         }
-    }
 
+
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
     private fun showTimePickerDialog(editTextTime: TextInputEditText) {
         val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
 
-        val timePickerDialog = TimePickerDialog(
-            this,
+        val timePickerDialog = object : TimePickerDialog(
+            editTextTime.context,
             { _, selectedHour, selectedMinute ->
                 val selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
                 editTextTime.setText(selectedTime)
             },
-            hour,
-            minute,
+            currentHour,
+            currentMinute,
             true
-        )
+        ) {
+            override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                if (hourOfDay < currentHour || (hourOfDay == currentHour && minute < currentMinute)) {
+                    view?.hour = currentHour
+                    view?.minute = currentMinute
+                }
+            }
+        }
+
         timePickerDialog.show()
     }
 
@@ -156,6 +180,7 @@ class MainActivity : AppCompatActivity() {
             val timeTextView: TextView = itemView.findViewById(R.id.textViewTime)
             val deleteButton: ImageView = itemView.findViewById(R.id.buttonDelete)
             val editButton: ImageView = itemView.findViewById(R.id.buttonEdit)
+            val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -173,6 +198,19 @@ class MainActivity : AppCompatActivity() {
             }
             holder.editButton.setOnClickListener {
                 showUpdateDialog(currentTask.first, currentTask.second, currentTask.third)
+            }
+            holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    holder.taskTextView.paintFlags = holder.taskTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+                    holder.taskTextView.maxLines = 1 // Set the maximum lines to 1
+                    holder.taskTextView.ellipsize = TextUtils.TruncateAt.END // Truncate at the end
+                } else {
+                    holder.taskTextView.paintFlags = holder.taskTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    holder.itemView.alpha = 1f // Reset alpha to show the card fully
+                    holder.taskTextView.maxLines = Int.MAX_VALUE // Set to maximum value to show all lines
+                    holder.taskTextView.ellipsize = null // Remove ellipsize
+                }
             }
         }
 

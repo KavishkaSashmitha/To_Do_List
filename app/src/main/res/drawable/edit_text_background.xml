@@ -1,0 +1,6 @@
+<!-- res/drawable/edit_text_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#F0F0F0"/> <!-- Change color as desired -->
+    <corners android:radius="8dp"/> <!-- Adjust corner radius as desired -->
+</shape>
